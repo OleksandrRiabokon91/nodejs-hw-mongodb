@@ -21,3 +21,5 @@ npm i cors
 npm install dotenv
 
 npm install mongoose
+
+npm install http-errors
