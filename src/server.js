@@ -21,18 +21,14 @@ export const setupServer = () => {
       },
     }),
   );
-
   app.get('/', (req, res) => {
     res.json({
       message: 'Hello World!',
     });
   });
-
   app.use('/contacts', contactsRouters);
-
   app.use(notFoundHandler);
   app.use(errorHandler);
-
   app.listen(PORT, (error) => {
     if (error) {
       throw error;
