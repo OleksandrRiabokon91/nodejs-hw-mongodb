@@ -23,3 +23,5 @@ npm install dotenv
 npm install mongoose
 
 npm install http-errors
+
+npm i joi
