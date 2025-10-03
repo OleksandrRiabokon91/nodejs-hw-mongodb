@@ -1,10 +1,10 @@
 // src/utils/parseFilterParams.js
 
 const parseTypeFilter = (type) => {
-  const isString = typeof type === 'string';
-  if (!isString) return;
+  if (typeof type !== 'string') return undefined;
   const allowedTypes = ['work', 'home', 'personal'];
-  return allowedTypes.includes(type) ? type : undefined;
+  const typeLower = type.toLowerCase();
+  return allowedTypes.includes(typeLower) ? typeLower : undefined;
 };
 
 const parseIsFavouriteFilter = (isFavourite) => {
