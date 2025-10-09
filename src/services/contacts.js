@@ -10,11 +10,13 @@ export async function getAllContacts({
   sortOrder = SORT_ORDER.ASC,
   contactTypeFilter,
   isFavouriteFilter,
+  userId,
 }) {
   const limit = perPage;
   const skip = page > 0 ? (page - 1) * perPage : 0;
 
   const filter = {};
+  if (userId) filter.userId = userId;
   if (contactTypeFilter) filter.contactType = contactTypeFilter;
   if (typeof isFavouriteFilter === 'boolean') {
     filter.isFavourite = isFavouriteFilter;
@@ -40,7 +42,7 @@ export async function getAllContacts({
 }
 
 export async function getContactById(id) {
-  const contact = await ContactsCollection.findById(id);
+  const contact = await ContactsCollection.findOne(id);
   return contact;
 }
 

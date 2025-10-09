@@ -25,3 +25,9 @@ npm install mongoose
 npm install http-errors
 
 npm i joi
+
+npm i bcrypt
+Changelog: https://github.com/npm/cli/releases/tag/v11.6.2
+npm install -g npm@11.6.2
+
+npm i cookie-parser
