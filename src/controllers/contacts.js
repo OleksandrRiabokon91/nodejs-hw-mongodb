@@ -11,6 +11,7 @@ import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
 
 export async function getContactsController(req, res) {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -31,6 +32,7 @@ export async function getContactsController(req, res) {
     data: contacts,
   });
 }
+
 export async function getContactByIdController(req, res, next) {
   const { id } = req.params;
   const contact = await getContactById(id, req.user.id);
@@ -46,14 +48,26 @@ export async function getContactByIdController(req, res, next) {
     data: contact,
   });
 }
+
 export async function createContactController(req, res) {
-  const contact = await createContact({ ...req.body, userId: req.user.id });
+  const photo = req.file;
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+  const payload = {
+    ...req.body,
+    userId: req.user.id,
+    ...(photoUrl && { photo: photoUrl }),
+  };
+  const contact = await createContact(payload);
   res.status(201).json({
     status: 201,
     message: 'Contact created successfully',
     data: contact,
   });
 }
+
 export async function deleteContactController(req, res, next) {
   const { id } = req.params;
   const result = await deleteContact(id, req.user.id);
@@ -62,10 +76,25 @@ export async function deleteContactController(req, res, next) {
   }
   res.status(204).send();
 }
+
 export async function upsertContactController(req, res) {
-  const result = await replaceContact(req.params.id, req.body, req.user.id);
+  const { id } = req.params;
+  const photo = req.file;
+  let photoUrl;
+
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+  const payload = {
+    ...req.body,
+    ...(photoUrl && { photo: photoUrl }),
+  };
+  const result = await replaceContact(id, payload, req.user.id);
+  if (!result.value) {
+    throw createHttpError(404, 'Contact not found or not created');
+  }
   if (result.updatedExisting) {
-    return res.json({
+    return res.status(200).json({
       status: 200,
       message: 'Contact replaced successfully',
       data: result.value,
@@ -77,10 +106,20 @@ export async function upsertContactController(req, res) {
     data: result.value,
   });
 }
-export async function updateContactController(req, res) {
-  const contact = await updateContact(req.params.id, req.body, req.user.id);
-  if (!contact) throw createHttpError(404, 'Contact not found');
 
+export async function updateContactController(req, res) {
+  const { id } = req.params;
+  const photo = req.file;
+  let photoUrl;
+  if (photo) {
+    photoUrl = await saveFileToUploadDir(photo);
+  }
+  const payload = {
+    ...req.body,
+    ...(photoUrl && { photo: photoUrl }),
+  };
+  const contact = await updateContact(id, payload, req.user.id);
+  if (!contact) throw createHttpError(404, 'Contact not found');
   return res.status(200).json({
     status: 200,
     message: 'Contact updated successfully',

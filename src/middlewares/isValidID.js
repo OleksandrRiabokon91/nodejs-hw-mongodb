@@ -3,7 +3,7 @@ import createHttpError from 'http-errors';
 
 export async function isValidID(req, res, next) {
   if (isValidObjectId(req.params.id) !== true) {
-    throw new createHttpError(400, 'ID is not valid');
+    throw createHttpError(400, 'ID is not valid');
   }
   return next();
 }

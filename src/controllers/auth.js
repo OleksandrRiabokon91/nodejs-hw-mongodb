@@ -5,12 +5,13 @@ import {
   loginUser,
   logoutUser,
   refreshUsersSession,
+  requestResetToken,
+  resetPassword,
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
-
   res.status(201).json({
     status: 201,
     message: 'Successfully registered a user!',
@@ -20,7 +21,6 @@ export const registerUserController = async (req, res) => {
 
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
-
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
@@ -29,7 +29,6 @@ export const loginUserController = async (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
   });
-
   res.status(200).json({
     status: 200,
     message: 'Successfully logged in an user!',
@@ -41,10 +40,8 @@ export const logoutUserController = async (req, res) => {
   if (typeof req.cookies.sessionId === 'string') {
     await logoutUser(req.cookies.sessionId);
   }
-
   res.clearCookie('sessionId');
   res.clearCookie('refreshToken');
-
   res.status(204).send();
 };
 
@@ -64,14 +61,42 @@ export const refreshUserSessionController = async (req, res) => {
     sessionId: req.cookies.sessionId,
     refreshToken: req.cookies.refreshToken,
   });
-
   setupSession(res, session);
-
-  res.json({
+  res.status(200).json({
     status: 200,
     message: 'Successfully refreshed a session!',
     data: {
       accessToken: session.accessToken,
     },
+  });
+};
+
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
+  res.status(200).json({
+    message: 'Reset password email has been successfully sent.',
+    status: 200,
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  if (typeof req.cookies.sessionId === 'string') {
+    try {
+      await logoutUser(req.cookies.sessionId);
+    } catch (err) {
+      console.warn(
+        'Failed to remove session after password reset:',
+        err.message,
+      );
+    }
+  }
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+  res.status(200).json({
+    message: 'Password has been successfully reset.',
+    status: 200,
+    data: {},
   });
 };

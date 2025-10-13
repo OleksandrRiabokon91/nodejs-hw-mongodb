@@ -3,7 +3,7 @@ import createHttpError from 'http-errors';
 export function validateBody(schema) {
   return async (req, res, next) => {
     if (!req.body || Object.keys(req.body).length === 0) {
-      return next(new createHttpError(400, 'Request body cannot be empty'));
+      return next(createHttpError(400, 'Request body cannot be empty'));
     }
     try {
       await schema.validateAsync(req.body, { abortEarly: false });
@@ -13,9 +13,8 @@ export function validateBody(schema) {
         field: detail.path.join('.'),
         message: detail.message,
       }));
-
       next(
-        new createHttpError(400, {
+        createHttpError(400, {
           message: 'Validation failed',
           errors,
         }),

@@ -7,17 +7,13 @@ export function errorHandler(err, req, res, next) {
       status: err.statusCode,
       message: err.message || 'Error',
     };
-
     if (err.errors) {
       response.errors = err.errors;
     }
-
     res.status(err.statusCode).json(response);
     return;
   }
-
   console.error(err);
-
   res.status(500).json({
     status: 500,
     message: 'Something went wrong',

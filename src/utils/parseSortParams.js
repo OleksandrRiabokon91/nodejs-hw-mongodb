@@ -16,16 +16,13 @@ const parseSortBy = (sortBy) => {
     'createdAt',
     'updatedAt',
   ];
-
   return keysOfContact.includes(sortBy) ? sortBy : '_id';
 };
 
 export const parseSortParams = (query) => {
   const { sortOrder, sortBy } = query;
-
   const parsedSortOrder = parseSortOrder(sortOrder);
   const parsedSortBy = parseSortBy(sortBy);
-
   return {
     sortOrder: parsedSortOrder,
     sortBy: parsedSortBy,

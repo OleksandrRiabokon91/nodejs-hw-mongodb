@@ -6,7 +6,7 @@ const sessionSchema = new Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      //   unique: true,
+      unique: true,
     },
     accessToken: { type: String, required: true },
     refreshToken: { type: String, required: true },
@@ -15,5 +15,7 @@ const sessionSchema = new Schema(
   },
   { timestamps: true, versionKey: false },
 );
+
+sessionSchema.index({ updatedAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 7 });
 
 export const SessionsCollection = model('sessions', sessionSchema);
