@@ -2,22 +2,31 @@
 
 import multer from 'multer';
 import path from 'node:path';
+import { getEnvVar } from '../utils/getEnvVar.js';
 import { TEMP_UPLOAD_DIR } from '../constants/index.js';
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, TEMP_UPLOAD_DIR);
-  },
-  filename: function (req, file, cb) {
-    const originalName = path.basename(file.originalname);
-    const safeName = originalName
-      .toLowerCase()
-      .replace(/\s+/g, '_')
-      .replace(/[^a-z0-9._-]/g, '');
-    const uniqueSuffix = Date.now();
-    cb(null, `${uniqueSuffix}_${safeName}`);
-  },
-});
+const isCloudinaryEnabled = getEnvVar('ENABLE_CLOUDINARY') === 'true';
+
+let storage;
+
+if (isCloudinaryEnabled) {
+  storage = multer.memoryStorage();
+} else {
+  storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, TEMP_UPLOAD_DIR);
+    },
+    filename: (req, file, cb) => {
+      const originalName = path.basename(file.originalname);
+      const safeName = originalName
+        .toLowerCase()
+        .replace(/\s+/g, '_')
+        .replace(/[^a-z0-9._-]/g, '');
+      const uniqueSuffix = Date.now();
+      cb(null, `${uniqueSuffix}_${safeName}`);
+    },
+  });
+}
 
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
