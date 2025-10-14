@@ -41,3 +41,5 @@ npm i handlebars
 npm i multer
 
 npm install cloudinary
+
+npm install streamifier
