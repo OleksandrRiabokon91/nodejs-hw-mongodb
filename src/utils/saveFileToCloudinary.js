@@ -1,5 +1,5 @@
 // src/utils/saveFileToCloudinary.js
-import { v2 as cloudinary } from 'cloudinary';
+import { cloudinary } from 'cloudinary';
 import streamifier from 'streamifier';
 import { getEnvVar } from './getEnvVar.js';
 import createHttpError from 'http-errors';
