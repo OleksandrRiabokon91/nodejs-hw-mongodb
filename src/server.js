@@ -11,6 +11,8 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import routers from './routers/index.js';
 import { UPLOAD_DIR } from './constants/index.js';
 
+
+
 const PORT = Number(getEnvVar('PORT', '3000'));
 
 export const setupServer = () => {
@@ -30,7 +32,9 @@ export const setupServer = () => {
       message: 'Hello World!',
     });
   });
-  app.use('/uploads', express.static(UPLOAD_DIR));
+  if (getEnvVar('ENABLE_CLOUDINARY') !== 'true') {
+    app.use('/uploads', express.static(UPLOAD_DIR));
+  }
   app.use(routers);
   app.use(notFoundHandler);
   app.use(errorHandler);

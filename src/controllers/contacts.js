@@ -1,7 +1,6 @@
 // src/controllers/students.js
 import {
   getAllContacts,
-  getContactById,
   createContact,
   deleteContact,
   replaceContact,
@@ -11,7 +10,7 @@ import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
-import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { handlePhotoUpload } from '../utils/handlePhotoUpload.js';
 
 export async function getContactsController(req, res) {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -34,27 +33,15 @@ export async function getContactsController(req, res) {
 }
 
 export async function getContactByIdController(req, res, next) {
-  const { id } = req.params;
-  const contact = await getContactById(id, req.user.id);
-  if (!contact) {
-    throw createHttpError(404, 'Contact not found');
-  }
-  if (contact.userId.toString() !== req.user.id.toString()) {
-    throw new createHttpError(403, 'Contact is denied');
-  }
   res.status(200).json({
     status: 200,
-    message: `Successfully found contact with id ${id}!`,
-    data: contact,
+    message: `Successfully found contact with id ${req.params.id}!`,
+    data: req.contact,
   });
 }
 
 export async function createContactController(req, res) {
-  const photo = req.file;
-  let photoUrl;
-  if (photo) {
-    photoUrl = await saveFileToUploadDir(photo);
-  }
+  const photoUrl = await handlePhotoUpload(req.file);
   const payload = {
     ...req.body,
     userId: req.user.id,
@@ -79,12 +66,7 @@ export async function deleteContactController(req, res, next) {
 
 export async function upsertContactController(req, res) {
   const { id } = req.params;
-  const photo = req.file;
-  let photoUrl;
-
-  if (photo) {
-    photoUrl = await saveFileToUploadDir(photo);
-  }
+  const photoUrl = await handlePhotoUpload(req.file);
   const payload = {
     ...req.body,
     ...(photoUrl && { photo: photoUrl }),
@@ -109,11 +91,7 @@ export async function upsertContactController(req, res) {
 
 export async function updateContactController(req, res) {
   const { id } = req.params;
-  const photo = req.file;
-  let photoUrl;
-  if (photo) {
-    photoUrl = await saveFileToUploadDir(photo);
-  }
+  const photoUrl = await handlePhotoUpload(req.file);
   const payload = {
     ...req.body,
     ...(photoUrl && { photo: photoUrl }),

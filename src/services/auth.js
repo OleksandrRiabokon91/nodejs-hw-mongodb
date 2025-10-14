@@ -95,7 +95,7 @@ export const requestResetToken = async (email) => {
     },
     getEnvVar('JWT_SECRET'),
     {
-      expiresIn: '50h',
+      expiresIn: '5m',
     },
   );
   const resetPasswordTemplatePath = path.join(

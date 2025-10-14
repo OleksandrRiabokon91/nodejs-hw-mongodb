@@ -12,7 +12,7 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { isValidID } from '../middlewares/isValidID.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { checkContactOwnership } from '../middlewares/checkContactOwnership.js';
-import { upload } from '../middlewares/multer.js';
+import { upload } from '../middlewares/upload.js';
 import {
   createContactSchema,
   updateContactSchema,

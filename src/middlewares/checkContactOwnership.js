@@ -1,16 +1,16 @@
-import { ContactsCollection } from '../db/models/contact.js';
+import { getContactById } from '../services/contacts.js';
 
 export const checkContactOwnership = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userId = req.user._id;
-    const contact = await ContactsCollection.findById(id);
+    const contact = await getContactById(id, userId);
     if (!contact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res
+        .status(404)
+        .json({ message: 'Contact not found or access denied' });
     }
-    if (contact.userId.toString() !== userId.toString()) {
-      return res.status(403).json({ message: 'Access denied' });
-    }
+
     req.contact = contact;
     next();
   } catch (error) {
