@@ -43,3 +43,5 @@ npm i multer
 npm install cloudinary
 
 npm install streamifier
+
+npm i swagger-ui-express

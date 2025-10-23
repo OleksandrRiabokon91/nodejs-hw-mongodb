@@ -1,0 +1,61 @@
+tags:
+  - Auth
+summary: Reset password
+operationId: resetPassword
+description: 'Reset user password using a token from email.
+  ⚠️ **Note:** On the current free deployment of the server (Render free plan), email delivery is blocked.
+  Password reset will only work on a paid plan where email sending is enabled.'
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - token
+          - password
+        properties:
+          token:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+          password:
+            type: string
+            example: newPassword123
+responses:
+  '200':
+    description: Password has been successfully reset
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Password has been successfully reset.
+            data:
+              type: object
+              example: {}
+  '401':
+    description: Token is expired or invalid.
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 401
+            message:
+              type: string
+              example: Token is expired or invalid.
