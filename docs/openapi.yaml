@@ -12,7 +12,6 @@ tags:
   - name: Auth
     description: User authentication and authorization
 servers:
-  - url: http://localhost:3000
   - url: https://contacts-app-zy0f.onrender.com
 paths:
   /contacts:
