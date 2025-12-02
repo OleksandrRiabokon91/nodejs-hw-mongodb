@@ -1,0 +1,55 @@
+type: object
+required:
+  - _id
+  - name
+  - phoneNumber
+  - contactType
+  - userId
+  - createdAt
+  - updatedAt
+properties:
+  _id:
+    type: string
+    description: Contact id
+    example: 68e7ea086ff8813c7dbdf305
+  name:
+    type: string
+    description: Contact name
+    example: John Deere
+  phoneNumber:
+    type: string
+    description: Contact phone number must be in international format starting with "+", may include "-", NO spaces " ".
+    example: +380931234567 or +380-931234567 or +1-202-555-0133
+  contactType:
+    type: string
+    description: Contact type
+    enum: ['work', 'home', 'personal']
+    example: personal
+  userId:
+    type: string
+    description: User id
+    example: 68e89c4dc35d4dd8ba3a7c79
+  createdAt:
+    type: string
+    format: date-time
+    description: Date and time when the contact was created
+    example: 2025-10-09T17:00:34.324+00:00
+  updatedAt:
+    type: string
+    format: date-time
+    description: Date and time when the contact was last updated
+    example: 2025-10-09T17:00:34.324+00:00
+  email:
+    type: string
+    format: email
+    description: Contact email address (optional)
+    example: john.deere@example.com
+  isFavourite:
+    type: boolean
+    description: Indicates whether the contact is marked as favourite
+    example: true
+  photo:
+    type: string
+    format: uri
+    description: URL of the contact photo (optional)
+    example: https://res.cloudinary.com/duohylimm/image/upload/v1760473258/contacts/hfw42aenajxxnqilnpkw.jpg

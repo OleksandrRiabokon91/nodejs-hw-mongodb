@@ -1,0 +1,122 @@
+tags:
+  - Auth
+summary: Register new user
+operationId: registerUser
+description: 'Create a new user account.
+  ⚠️ **Important:** In the current version, editing user data after registration is **not implemented**.
+  Please make sure to save your password securely, as password recovery or modification will **not** be available after registration.'
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - name
+          - email
+          - password
+        properties:
+          name:
+            type: string
+            example: John Doe
+          email:
+            type: string
+            format: email
+            example: john@example.com
+          password:
+            type: string
+            example: '12345678'
+responses:
+  '201':
+    description: Successfully registered a user
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully registered a user!
+            data:
+              type: object
+              required:
+                - name
+                - email
+                - _id
+                - createdAt
+                - updatedAt
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: john@example.com
+                _id:
+                  type: string
+                  example: 60a7b9f6a7d6e2b1c0f637d1
+                createdAt:
+                  type: string
+                  format: date-time
+                  description: Date and time when the user was created
+                  example: 2025-10-09T17:00:34.324+00:00
+                updatedAt:
+                  type: string
+                  format: date-time
+                  description: Date and time when the user was last updated
+                  example: 2025-10-09T17:00:34.324+00:00
+  '400':
+    description: Validation error
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: Validation failed
+            errors:
+              type: array
+              description: List of validation errors for each field (optional)
+              items:
+                type: object
+                required:
+                  - field
+                  - message
+                properties:
+                  field:
+                    type: string
+                    example: password
+                  message:
+                    type: string
+                    example: '"password" is required'
+  '409':
+    description: Conflict - Email in use
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 409
+            message:
+              type: string
+              example: Email in use

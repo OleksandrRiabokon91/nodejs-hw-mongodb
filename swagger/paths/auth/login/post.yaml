@@ -1,0 +1,89 @@
+tags:
+  - Auth
+summary: User login
+operationId: loginUser
+description: >
+  Authenticate user by email and password.  
+  If credentials are valid — returns an access token in response body and sets refreshToken & sessionId in HttpOnly cookies.
+security: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+            format: email
+            example: john@example.com
+          password:
+            type: string
+            example: '12345678'
+responses:
+  '200':
+    description: Successfully logged in
+    headers:
+      Set-Cookie:
+        description: Contains sessionId and refreshToken cookies
+        schema:
+          type: string
+          example: sessionId=abc123; HttpOnly; Path=/; Expires=Wed, 23 Oct 2024 10:00:00 GMT
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully logged in an user!
+            data:
+              type: object
+              required:
+                - accessToken
+              properties:
+                accessToken:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  '401':
+    description: Incorrect password or unauthorized access
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 401
+            message:
+              type: string
+              example: Unauthorized
+  '404':
+    description: User with this email not found
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: User not found
