@@ -1,5 +1,3 @@
-// src/routers/auth.js
-
 import { Router } from 'express';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { registerUserSchema, loginUserSchema } from '../validation/auth.js';

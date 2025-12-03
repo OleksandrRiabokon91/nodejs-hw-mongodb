@@ -1,4 +1,3 @@
-// src/db/models/session.js
 import mongoose, { model, Schema } from 'mongoose';
 
 const sessionSchema = new Schema(

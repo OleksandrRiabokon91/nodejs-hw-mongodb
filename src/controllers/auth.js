@@ -1,5 +1,3 @@
-// src/controllers/auth.js
-
 import {
   registerUser,
   loginUser,

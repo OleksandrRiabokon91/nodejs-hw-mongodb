@@ -1,4 +1,3 @@
-// src/middlewares/errorHandler.js
 import { isHttpError } from 'http-errors';
 
 export function errorHandler(err, req, res, next) {

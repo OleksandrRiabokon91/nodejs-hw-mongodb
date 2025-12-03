@@ -1,5 +1,3 @@
-// src/utils/parseFilterParams.js
-
 const parseTypeFilter = (type) => {
   if (typeof type !== 'string') return undefined;
   const allowedTypes = ['work', 'home', 'personal'];
