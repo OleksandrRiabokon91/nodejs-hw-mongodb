@@ -1,4 +1,3 @@
-// src/routers/contacts.js
 import { Router } from 'express';
 import {
   getContactsController,

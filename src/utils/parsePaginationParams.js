@@ -1,5 +1,3 @@
-// src/utils/parsePaginationParams.js
-
 function parseNumber(value, defaultValue) {
   if (typeof value !== 'string') return defaultValue;
   const parsedNumber = parseInt(value);
