@@ -1,5 +1,3 @@
-// src/middlewares/upload.js
-
 import multer from 'multer';
 import path from 'node:path';
 import { getEnvVar } from '../utils/getEnvVar.js';

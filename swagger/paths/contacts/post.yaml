@@ -23,7 +23,7 @@ requestBody:
           phoneNumber:
             type: string
             description: Contact phone number
-            example: +380931234567
+            example: '+380931234567'
           contactType:
             type: string
             description: Contact type

@@ -1,4 +1,3 @@
-// src/constants/index.js
 import path from 'node:path';
 export const SORT_ORDER = {
   ASC: 'asc',
